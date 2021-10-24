@@ -5,6 +5,7 @@ from pybricks.ev3devices import Motor, ColorSensor
 from pybricks.parameters import Port, Color
 from pybricks.tools import wait
 from pybricks.robotics import DriveBase
+from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 
 # Code General Setup
 Debug = False
@@ -32,6 +33,12 @@ threshold = (BLACK + WHITE) / 2
 # Motors Parameters
 speed = 80
 deviation = 0
+
+# MailBox Declaration
+SERVER = '00:17:E9:B6:7D:E9'
+MailClient = BluetoothMailboxClient()
+BlueIntersection = TextMailbox("Blue-Intersection", MailClient)
+MailClient.connect(SERVER)
 
 while True:
     if(line_sensor_left.reflection() > threshold and line_sensor_right.reflection() > threshold):
