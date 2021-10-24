@@ -17,19 +17,30 @@ BLACK = 7
 WHITE = 68
 threshold = (BLACK + WHITE) / 2
 
-DRIVE_SPEED = 60
+print ("left,right")
+
+speed = 80
 
 deviation = 0
 
 while True:
-    if((line_sensor_right.reflection()>7 and line_sensor_right.reflection()<=11)or(line_sensor_left.reflection()>7 and line_sensor_left.reflection()<=11)):
-        ev3.speaker.beep()
+    if(line_sensor_left.reflection() > threshold and line_sensor_right.reflection() > threshold):
+        deviation=0
+        speed =60
     else:
-        if(line_sensor_right.reflection() <=threshold):
-            deviation += 4
-        if(line_sensor_left.reflection() <=threshold):
-         deviation -= 4
-        if(line_sensor_right.reflection() >=threshold and line_sensor_left.reflection() >=threshold):
-            deviation=0
-    robot.drive(DRIVE_SPEED, deviation)
+        if(line_sensor_left.reflection() < threshold and line_sensor_right.reflection() < threshold):
+            deviation=-90
+            speed=45
+        else:
+            if(line_sensor_left.reflection()< threshold):
+                deviation-=7
+                speed=45
+            if(line_sensor_right.reflection()< threshold):
+                deviation +=7
+                speed=45
+
+    robot.drive(speed, deviation)
+    
+    print(str(line_sensor_left.reflection()) + "," + str(line_sensor_right.reflection()))
+
     wait(15)
