@@ -16,28 +16,28 @@ if(Debug == True):
 
 # Obtaining MAC Address for the server
 BluetoothMAC = os.popen("hcitool dev | cut -sf3").read()
-logger.info(' Obtaining MAC Address: %s', BluetoothMAC)
+logger.info(' Obtaining MAC Address: ', BluetoothMAC)
 
 # Max. number of clients
 MaxClients = 1
-logger.debug(' Setting the maximum number of clients to: %s', MaxClients)
+logger.debug(' Setting the maximum number of clients to: ' + MaxClients)
 
 # Mailboxes declaration
 MailServer = BluetoothMailboxServer()
 logger.info(' Initiating the mail server')
 
 MailCli0 = LogicMailbox("Client-0", MailServer)
-logger.debug(' Creating a Boolean Mailbox with name: %s', 'Client-0')
+logger.debug(' Creating a Boolean Mailbox with name: ' + 'Client-0')
 #MailCli0Message = ""
 
 MailCli1 = LogicMailbox("Client-1", MailServer)
-logger.debug(' Creating a Boolean Mailbox with name: %s', 'Client-1')
+logger.debug(' Creating a Boolean Mailbox with name: ' + 'Client-1')
 
 BlueIntersection = TextMailbox("Blue-Intersection", MailServer)
-logger.debug(' Creating a Textual Mailbox with name: %s', 'Blue-Intersection')
+logger.debug(' Creating a Textual Mailbox with name: ' + 'Blue-Intersection')
 
 GreenIntersection = TextMailbox("Green-Intersection", MailServer)
-logger.debug(' Creating a Textual Mailbox with name: %s', 'Green-Intersection')
+logger.debug(' Creating a Textual Mailbox with name: ' + 'Green-Intersection')
 
 # Waiting for clients connection
 logger.info(' Start listening to potential EV3 clients')
@@ -50,18 +50,26 @@ def CloseServer():
 
 async def GetUpdateMailCli0():
     while True:
-        logger.info(' Start listening to the Mailbox: %s', 'Client-0')
-        return MailCli0.wait_new()
+        logger.info(' Start listening to the Mailbox: ' + 'Client-0')
+        MailCli0.wait()  
+        data = MailCli0.read()
+        if (data != None):
+            logger.info(' New message in mailbox: ' + 'Client-0 : ' + str(data))
+            return str(data)
 
 async def GetUpdateMailCli1():
     while True:
-        logger.info(' Start listening to the Mailbox: %s', 'Client-0')
-        return MailCli1.wait()  
+        logger.info(' Start listening to the Mailbox: ' + 'Client-1')
+        MailCli1.wait()  
+        data = MailCli1.read()
+        if (data != None):
+            logger.info(' New message in mailbox: ' + 'Client-1 : ' + str(data))
+            return str(data)
 
 async def GetUpdateBlueIntersection():
     while True:
-        logger.info(' Start listening to the Mailbox: %s', 'BlueIntersection')
-        BlueIntersection.wait_new()
+        logger.info(' Start listening to the Mailbox: ' + 'BlueIntersection')
+        BlueIntersection.wait()
         data = BlueIntersection.read()
         if (data != None):
             logger.info(' New message in mailbox: ' + 'Blue-Intersection : ' + str(data))
@@ -69,11 +77,11 @@ async def GetUpdateBlueIntersection():
 
 async def GetUpdateGreenIntersection():
     while True:
-        logger.info(' Start listening to the Mailbox: %s', 'Green-Intersection')
+        logger.info(' Start listening to the Mailbox: ' + 'Green-Intersection')
         GreenIntersection.wait()
         data = GreenIntersection.read()
         if (data != None):
-            logger.info(' New message in mailbox: ' +'Green-Intersection : ' + str(data))
+            logger.info(' New message in mailbox: ' + 'Green-Intersection : ' + str(data))
             return str(data)
 
 async def main():
