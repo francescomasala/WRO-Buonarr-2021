@@ -51,7 +51,11 @@ while True:
                 deviation=0
                 speed=60
             else:
-                if(line_sensor_right.color()==RED):
+                if(line_sensor_right.reflection()< threshold):
+                    deviation+=3
+                if(line_sensor_left.reflection()<threshold):
+                    deviation-=3
+        if(line_sensor_right.color()==Color.RED):
                     while(speed>=0):
                         if(line_sensor_right.reflection()< threshold):
                             deviation+=3
@@ -61,21 +65,17 @@ while True:
                         robot.drive(speed, deviation)
                         wait(15)
                     wait(150)
-                    while(speed>=60):
+                    while(speed<=60):
                         if(line_sensor_right.reflection()< threshold):
-                            deviation+=6
+                            deviation+=3
                         if(line_sensor_left.reflection()<threshold):
-                            deviation-=6
+                            deviation-=3
                         speed+=6
                         wait(15)
                         robot.drive(speed, deviation)
-                else:
-                    if(line_sensor_right.reflection()< threshold):
-                        deviation+=6
-                    if(line_sensor_left.reflection()<threshold):
-                        deviation-=6
+                    
         
     robot.drive(speed, deviation)
-    print(str(line_sensor_left.reflection()) + "," + str(line_sensor_right.reflection())+ ","+ str(color_sensor.color()))
+    print(str(line_sensor_left.reflection()) + "," + str(line_sensor_right.reflection())+ ","+ str(color_sensor.Color()))
 
     wait(15)
